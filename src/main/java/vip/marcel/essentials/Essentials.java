@@ -6,10 +6,12 @@ import vip.marcel.essentials.listeners.AsyncPlayerChatListener;
 import vip.marcel.essentials.listeners.PlayerJoinListener;
 import vip.marcel.essentials.listeners.PlayerQuitListener;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import vip.marcel.essentials.commands.GroupCommand;
 import vip.marcel.essentials.listeners.PlayerKickListener;
 import vip.marcel.essentials.managers.BackendManager;
 import vip.marcel.essentials.managers.MongoManager;
@@ -22,7 +24,7 @@ import vip.marcel.essentials.managers.MongoManager;
  */
 public class Essentials extends JavaPlugin {
     
-    private final @Getter String prefix = "§8§l⎪ §6SecretGames §8⎪ §7";
+    private final @Getter String prefix = "§8§l⎪ §bLocalGames §8⎪ §7";
     
     private MongoManager mongoManager;
     private BackendManager backendManager;
@@ -57,6 +59,8 @@ public class Essentials extends JavaPlugin {
         pluginManager.registerEvents(new PlayerQuitListener(this), this);
         pluginManager.registerEvents(new PlayerKickListener(this), this);
         pluginManager.registerEvents(new AsyncPlayerChatListener(this), this);
+        
+        getCommand("group").setExecutor(new GroupCommand(this));
     }
     
     

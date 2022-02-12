@@ -56,6 +56,34 @@ public class BackendManager {
         });
     }
     
+    public void getUser(String uuid, Consumer<User> consumer) {
+        
+        plugin.getMongoManager().getPlayers().find(Filters.eq("uuid", uuid)).first((document, thrwbl) -> {
+            
+            if(document == null) {
+                User user = new User();
+                user.setUuid(uuid);
+                user.setName("");
+                user.setGroupId(0);
+                user.setCreateDate(System.currentTimeMillis());
+                user.setLastLogin(System.currentTimeMillis());
+                user.setOnlineTime(0);
+                
+                document = plugin.getGson().fromJson(plugin.getGson().toJson(user), Document.class);
+                
+                plugin.getMongoManager().getPlayers().insertOne(document, (document1, thrwbl1) -> {
+                    consumer.accept(user);
+                });
+                
+                return;
+            }
+            
+            User user = plugin.getGson().fromJson(document.toJson(), User.class);
+            consumer.accept(user);
+            
+        });
+    }
+    
     public void updateUser(User user, Consumer<User> consumer) {
         
         Document document = plugin.getGson().fromJson(plugin.getGson().toJson(user), Document.class);

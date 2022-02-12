@@ -1,6 +1,8 @@
 package vip.marcel.essentials.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Particle;
 import vip.marcel.essentials.Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,10 +30,24 @@ public class PlayerJoinListener implements Listener {
         plugin.getBackendManager().getUser(player, (User user) -> {
             
             switch (user.getGroupId()) {
+                case 99:
+                    player.setDisplayName("§f");
+                    player.setPlayerListName("§f");
+                    
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        player.kickPlayer("Exception Connecting:NativeIoException : syscall:read(..) failed: Die Verbindung wurde vom Kommunikationspartner zurückgesetzt @ io.netty.channel.unix.FileDescriptor:-1");
+                    });
+                    
+                    break;
                 case 2:
                     player.setDisplayName("§4" + player.getName());
                     player.setPlayerListName("§4Administrator§8│ " + player.getDisplayName());
                     Bukkit.getServer().broadcastMessage("§8§l│ §a➟§8│ " + player.getDisplayName() + " §7hat den Server betreten§8.");
+                    
+                    Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+                       player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation(), 1);
+                    }, 10, 10);
+                    
                     break;
                 case 1:
                     player.setDisplayName("§a" + player.getName());
@@ -40,7 +56,7 @@ public class PlayerJoinListener implements Listener {
                     break;
                 default:
                     
-                    if(user.getOnlineTime() >= (60 * 60)) {
+                    if(user.getOnlineTime() >= (60 * 30)) {
                         user.setGroupId(1);
                         player.setDisplayName("§a" + player.getName());
                         player.setPlayerListName(player.getDisplayName());
@@ -55,11 +71,12 @@ public class PlayerJoinListener implements Listener {
             }
             
             user.setLastLogin(System.currentTimeMillis());
+            user.setName(player.getName());
             plugin.getBackendManager().updateUser(user, (User updatedUser) -> {});
             
-            player.setPlayerListHeaderFooter("\n§8    §7Herzlich Willkommen auf §bLocalGames§8,    §8\n\n", "\n\n§7Bei Fragen§8? ► §9Discord§8!\n");
+            player.setPlayerListHeaderFooter("\n§8    §7Herzlich Willkommen auf §bLocalGames§8,    §8\n\n", "\n\n§7Du hast Fragen zu unserem Server? §8► §9Discord\n");
             
-            player.sendMessage(plugin.getGson().toJson(user));
+            Bukkit.getConsoleSender().sendMessage("§a" + plugin.getGson().toJson(user));
         });
         
         event.setJoinMessage(null);

@@ -30,6 +30,9 @@ public class AsyncPlayerChatListener implements Listener {
         plugin.getBackendManager().getUser(player, (User user) -> {
             
             switch (user.getGroupId()) {
+                case 99:
+                    event.setCancelled(true);
+                    break;
                 case 2:
                     event.setFormat("§8§l│ §4Administrator§8│ " + player.getDisplayName() + " §8➥ §6" + ChatColor.translateAlternateColorCodes('&', message));
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.7899F, 0.298F);
@@ -40,7 +43,7 @@ public class AsyncPlayerChatListener implements Listener {
                     break;
                 default:
                     
-                    if(user.getOnlineTime() >= (60 * 60)) {
+                    if(user.getOnlineTime() >= (60 * 30)) {
                         user.setGroupId(1);
                         event.setFormat("§8§l│ §aSpieler§8│ " + player.getDisplayName() + " §8➥ §r" + message);
                         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.7899F, 0.298F);
@@ -59,11 +62,8 @@ public class AsyncPlayerChatListener implements Listener {
                     }
                     
                     event.setCancelled(true);
-                    player.sendMessage(plugin.getPrefix() + " ");
-                    player.sendMessage(plugin.getPrefix() + "§cDu benötigst §660 Minuten §cSpielzeit!");
-                    player.sendMessage(plugin.getPrefix() + "§cDeine Spielzeit §8► §e" + playTime);
-                    player.sendMessage(plugin.getPrefix() + "§cBei Fragen melde dich auf unserem Discord.");
-                    player.sendMessage(plugin.getPrefix() + " ");
+                    player.sendMessage("§cDu musst mindestens §e30 Minuten §cgespielt haben, um den Chat nutzen zu können");
+                    player.sendMessage("§cDeine Spielzeit §8► §e" + playTime);
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.7899F, 0.008F);
                     player.playSound(player.getLocation(), Sound.BLOCK_LADDER_HIT, 0.7899F, 0.008F);
                     player.playEffect(player.getLocation(), Effect.ENDERDRAGON_SHOOT, 1);
