@@ -1,0 +1,6 @@
+name: Essentials
+version: 1.0
+author: VIPMarcel
+api-version: 1.17
+
+main: vip.marcel.essentials.Essentials
