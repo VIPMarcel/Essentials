@@ -30,7 +30,7 @@ public class PlayerJoinListener implements Listener {
         plugin.getBackendManager().getUser(player, (User user) -> {
             
             switch (user.getGroupId()) {
-                case 99:
+                case 99: /* Blacklisted Player */
                     player.setDisplayName("§f");
                     player.setPlayerListName("§f");
                     

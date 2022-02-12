@@ -1,5 +1,6 @@
 vip\marcel\essentials\entities\User.class
 vip\marcel\essentials\listeners\PlayerKickListener.class
+vip\marcel\essentials\commands\GroupCommand.class
 vip\marcel\essentials\Essentials.class
 vip\marcel\essentials\managers\BackendManager.class
 vip\marcel\essentials\managers\MongoManager.class

@@ -45,6 +45,7 @@ public class AsyncPlayerChatListener implements Listener {
                     
                     if(user.getOnlineTime() >= (60 * 30)) {
                         user.setGroupId(1);
+                        plugin.getBackendManager().updateUser(user, (User updatedUser) -> {});
                         event.setFormat("§8§l│ §aSpieler§8│ " + player.getDisplayName() + " §8➥ §r" + message);
                         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.7899F, 0.298F);
                         break;
