@@ -1,11 +1,11 @@
 package vip.marcel.essentials.listeners;
 
 import org.bukkit.Bukkit;
-import vip.marcel.essentials.Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import vip.marcel.essentials.Essentials;
 import vip.marcel.essentials.entities.User;
 
 /**
@@ -28,6 +28,10 @@ public class PlayerQuitListener implements Listener {
         if(plugin.getUser().containsKey(player)) {
             User user = plugin.getUserData(player);
             
+            if(user.getGroupId() != 99) {
+                Bukkit.getServer().broadcastMessage("§8§l│ §c✗§8│ " + player.getDisplayName() + " §7hat den Server verlassen§8.");
+            }
+            
             plugin.getBackendManager().updateUser(user, (User updatedUser) -> {
                 plugin.removeUserData(player);
             });
@@ -38,7 +42,6 @@ public class PlayerQuitListener implements Listener {
         }
         
         event.setQuitMessage(null);
-        Bukkit.getServer().broadcastMessage("§8§l│ §c✗§8│ " + player.getDisplayName() + " §7hat den Server verlassen§8.");
         
     }
     

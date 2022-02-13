@@ -1,6 +1,5 @@
 package vip.marcel.essentials.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +36,6 @@ public class PlayerKickListener implements Listener {
             player.addAttachment(plugin, "*", false);
         }
         
-        Bukkit.getServer().broadcastMessage("§8§l│ §c✗§8│ " + player.getDisplayName() + " §7hat den Server verlassen§8.");
         event.setLeaveMessage(null);
     }
     

@@ -85,9 +85,11 @@ public class PlayerJoinListener implements Listener {
         });
         
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if(plugin.getUser().get(player).getGroupId() == 2) {
-               player.setOp(true);
-               player.setGlowing(true); 
+            if(player.isOnline()) { //Vielleicht schon gekickt durch GroupID 99
+                if(plugin.getUser().get(player).getGroupId() == 2) {
+                    player.setOp(true);
+                    player.setGlowing(true); 
+                }
             }
         }, 10);
         
