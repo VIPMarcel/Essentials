@@ -7,3 +7,4 @@ vip\marcel\essentials\managers\MongoManager.class
 vip\marcel\essentials\listeners\AsyncPlayerChatListener.class
 vip\marcel\essentials\listeners\PlayerJoinListener.class
 vip\marcel\essentials\listeners\PlayerQuitListener.class
+vip\marcel\essentials\commands\PardonCommand.class

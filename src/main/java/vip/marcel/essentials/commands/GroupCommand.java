@@ -1,10 +1,14 @@
 package vip.marcel.essentials.commands;
 
+import java.util.List;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import vip.marcel.essentials.Essentials;
 import vip.marcel.essentials.entities.User;
 
@@ -105,6 +109,11 @@ public class GroupCommand implements CommandExecutor {
                         target.setDisplayName("§4" + target.getName());
                         target.setPlayerListName("§4Administrator§8│ " + target.getDisplayName());
                         
+                        if(!target.hasPermission("*")) {
+                            target.addAttachment(plugin, "*", true);
+                            target.recalculatePermissions();
+                        }
+                        
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;
                         
@@ -112,12 +121,22 @@ public class GroupCommand implements CommandExecutor {
                         target.setDisplayName("§a" + target.getName());
                         target.setPlayerListName(target.getDisplayName());
                         
+                        if(target.hasPermission("*")) {
+                            target.addAttachment(plugin, "*", false);
+                            target.recalculatePermissions();
+                        }
+                        
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;
                         
                     default:
                         target.setDisplayName("§7" + target.getName());
                         target.setPlayerListName(target.getDisplayName());
+                        
+                        if(target.hasPermission("*")) {
+                            target.addAttachment(plugin, "*", false);
+                            target.recalculatePermissions();
+                        }
                         
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;

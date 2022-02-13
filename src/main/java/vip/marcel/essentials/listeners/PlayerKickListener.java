@@ -25,12 +25,16 @@ public class PlayerKickListener implements Listener {
     public void onPlayerKickEvent(final PlayerKickEvent event) {
         final Player player = event.getPlayer();
         
-        if(player.hasMetadata("userData")) {
-            User user = (User) player.getMetadata("userData").get(0).value();
+        if(plugin.getUser().containsKey(player)) {
+            User user = plugin.getUserData(player);
             
             plugin.getBackendManager().updateUser(user, (User updatedUser) -> {
-                plugin.removeMetadata(player, "userData");
+                plugin.removeUserData(player);
             });
+        }
+        
+        if(player.hasPermission("*")) {
+            player.addAttachment(plugin, "*", false);
         }
         
         Bukkit.getServer().broadcastMessage("§8§l│ §c✗§8│ " + player.getDisplayName() + " §7hat den Server verlassen§8.");

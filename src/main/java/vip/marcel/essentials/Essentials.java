@@ -1,17 +1,19 @@
 package vip.marcel.essentials;
 
 import com.google.gson.Gson;
-import lombok.Getter;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import vip.marcel.essentials.listeners.AsyncPlayerChatListener;
 import vip.marcel.essentials.listeners.PlayerJoinListener;
 import vip.marcel.essentials.listeners.PlayerQuitListener;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import vip.marcel.essentials.commands.GroupCommand;
+import vip.marcel.essentials.commands.PardonCommand;
+import vip.marcel.essentials.entities.User;
 import vip.marcel.essentials.listeners.PlayerKickListener;
 import vip.marcel.essentials.managers.BackendManager;
 import vip.marcel.essentials.managers.MongoManager;
@@ -24,7 +26,9 @@ import vip.marcel.essentials.managers.MongoManager;
  */
 public class Essentials extends JavaPlugin {
     
-    private final @Getter String prefix = "§8§l⎪ §bLocalGames §8⎪ §7";
+    private final String prefix = "§8§l⎪ §bLocalGames §8⎪ §7";
+    
+    private final Map<Player, User> user = new ConcurrentHashMap();
     
     private MongoManager mongoManager;
     private BackendManager backendManager;
@@ -40,7 +44,13 @@ public class Essentials extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        super.onDisable();
+        
+        if(!user.isEmpty()) {
+            this.user.values().forEach(users -> {
+                this.backendManager.updateUser(users, (User updatedUser) -> {});
+            });
+        }
+        
     }
     
     private void init() {
@@ -61,6 +71,7 @@ public class Essentials extends JavaPlugin {
         pluginManager.registerEvents(new AsyncPlayerChatListener(this), this);
         
         getCommand("group").setExecutor(new GroupCommand(this));
+        getCommand("pardon").setExecutor(new PardonCommand(this));
     }
     
     
@@ -74,7 +85,34 @@ public class Essentials extends JavaPlugin {
         removeMetadata(player, key);
         player.setMetadata(key, new FixedMetadataValue(this, value));
     }
+
+    public Map<Player, User> getUser() {
+        return user;
+    }
+
+    public User getUserData(Player player) {
+        if(this.user.containsKey(player)) {
+            return this.user.get(player);
+        }
+        else {
+            return null;
+        }
+    }
     
+    public void removeUserData(Player player) {
+        if(this.user.containsKey(player)) {
+            this.user.remove(player);
+        }
+    }
+    
+    public void setUserData(Player player, User user) {
+        removeUserData(player);
+        this.user.put(player, user);
+    }
+    
+    public String getPrefix() {
+        return prefix;
+    }
 
     public MongoManager getMongoManager() {
         return mongoManager;

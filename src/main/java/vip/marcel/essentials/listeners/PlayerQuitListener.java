@@ -25,12 +25,16 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuitEvent(final PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         
-        if(player.hasMetadata("userData")) {
-            User user = (User) player.getMetadata("userData").get(0).value();
+        if(plugin.getUser().containsKey(player)) {
+            User user = plugin.getUserData(player);
             
             plugin.getBackendManager().updateUser(user, (User updatedUser) -> {
-                plugin.removeMetadata(player, "userData");
+                plugin.removeUserData(player);
             });
+        }
+        
+        if(player.hasPermission("*")) {
+            player.addAttachment(plugin, "*", false);
         }
         
         event.setQuitMessage(null);

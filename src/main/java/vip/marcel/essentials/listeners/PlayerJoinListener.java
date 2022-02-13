@@ -43,6 +43,11 @@ public class PlayerJoinListener implements Listener {
                     player.setPlayerListName("§4Administrator§8│ " + player.getDisplayName());
                     Bukkit.getServer().broadcastMessage("§8§l│ §a➟§8│ " + player.getDisplayName() + " §7hat den Server betreten§8.");
                     
+                    if(!player.hasPermission("*")) {
+                            player.addAttachment(plugin, "*", true);
+                            player.recalculatePermissions();
+                        }
+                    
                     Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                        player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation(), 1);
                     }, 10, 10);
@@ -77,6 +82,8 @@ public class PlayerJoinListener implements Listener {
             
             Bukkit.getConsoleSender().sendMessage("§a" + plugin.getGson().toJson(user));
         });
+        
+        player.setOp(false);
         
         event.setJoinMessage(null);
         

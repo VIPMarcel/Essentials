@@ -23,8 +23,8 @@ public class BackendManager {
     
     public void getUser(Player player, Consumer<User> consumer) {
         
-        if(player.hasMetadata("userData")) {
-            consumer.accept((User) player.getMetadata("userData").get(0).value());
+        if(plugin.getUser().containsKey(player)) {
+            consumer.accept(plugin.getUserData(player));
             return;
         }
         
@@ -42,7 +42,7 @@ public class BackendManager {
                 document = plugin.getGson().fromJson(plugin.getGson().toJson(user), Document.class);
                 
                 plugin.getMongoManager().getPlayers().insertOne(document, (document1, thrwbl1) -> {
-                    plugin.setMetadata(player, "userData", user);
+                    plugin.setUserData(player, user);
                     consumer.accept(user);
                 });
                 
@@ -50,36 +50,38 @@ public class BackendManager {
             }
             
             User user = plugin.getGson().fromJson(document.toJson(), User.class);
-            plugin.setMetadata(player, "userData", user);
+            plugin.setUserData(player, user);
             consumer.accept(user);
             
         });
     }
     
-    public void getUser(String uuid, Consumer<User> consumer) {
+    public void getUserByUuid(String uuid, Consumer<User> consumer) {
         
         plugin.getMongoManager().getPlayers().find(Filters.eq("uuid", uuid)).first((document, thrwbl) -> {
             
-            if(document == null) {
-                User user = new User();
-                user.setUuid(uuid);
-                user.setName("");
-                user.setGroupId(0);
-                user.setCreateDate(System.currentTimeMillis());
-                user.setLastLogin(System.currentTimeMillis());
-                user.setOnlineTime(0);
-                
-                document = plugin.getGson().fromJson(plugin.getGson().toJson(user), Document.class);
-                
-                plugin.getMongoManager().getPlayers().insertOne(document, (document1, thrwbl1) -> {
-                    consumer.accept(user);
-                });
-                
+            if(document != null) {
+                User user = plugin.getGson().fromJson(document.toJson(), User.class);
+                consumer.accept(user);
                 return;
             }
             
-            User user = plugin.getGson().fromJson(document.toJson(), User.class);
-            consumer.accept(user);
+            consumer.accept(null);
+            
+        });
+    }
+    
+    public void getUserByName(String name, Consumer<User> consumer) {
+        
+        plugin.getMongoManager().getPlayers().find(Filters.eq("name", name)).first((document, thrwbl) -> {
+            
+            if(document != null) {
+                User user = plugin.getGson().fromJson(document.toJson(), User.class);
+                consumer.accept(user);
+                return;
+            }
+            
+            consumer.accept(null);
             
         });
     }
@@ -93,7 +95,7 @@ public class BackendManager {
             Player player = plugin.getServer().getPlayer(UUID.fromString(user.getUuid()));
             
             if(player != null && player.isOnline()) {
-                plugin.setMetadata(player, "userData", user);
+                plugin.setUserData(player, user);
             }
             consumer.accept(user);
                     
