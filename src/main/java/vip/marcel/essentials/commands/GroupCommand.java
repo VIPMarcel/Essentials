@@ -1,14 +1,10 @@
 package vip.marcel.essentials.commands;
 
-import java.util.List;
-import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import vip.marcel.essentials.Essentials;
 import vip.marcel.essentials.entities.User;
 
@@ -99,6 +95,9 @@ public class GroupCommand implements CommandExecutor {
                     case 99:
                         target.setDisplayName("§f");
                         target.setPlayerListName("§f");
+                        
+                        target.setOp(false);
+                        target.setGlowing(false);
 
                         Bukkit.getScheduler().runTask(plugin, () -> {
                             target.kickPlayer("Exception Connecting:NativeIoException : syscall:read(..) failed: Die Verbindung wurde vom Kommunikationspartner zurückgesetzt @ io.netty.channel.unix.FileDescriptor:-1");
@@ -109,10 +108,8 @@ public class GroupCommand implements CommandExecutor {
                         target.setDisplayName("§4" + target.getName());
                         target.setPlayerListName("§4Administrator§8│ " + target.getDisplayName());
                         
-                        if(!target.hasPermission("*")) {
-                            target.addAttachment(plugin, "*", true);
-                            target.recalculatePermissions();
-                        }
+                        target.setOp(true);
+                        target.setGlowing(true);
                         
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;
@@ -121,10 +118,8 @@ public class GroupCommand implements CommandExecutor {
                         target.setDisplayName("§a" + target.getName());
                         target.setPlayerListName(target.getDisplayName());
                         
-                        if(target.hasPermission("*")) {
-                            target.addAttachment(plugin, "*", false);
-                            target.recalculatePermissions();
-                        }
+                        target.setOp(false);
+                        target.setGlowing(false);
                         
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;
@@ -133,10 +128,8 @@ public class GroupCommand implements CommandExecutor {
                         target.setDisplayName("§7" + target.getName());
                         target.setPlayerListName(target.getDisplayName());
                         
-                        if(target.hasPermission("*")) {
-                            target.addAttachment(plugin, "*", false);
-                            target.recalculatePermissions();
-                        }
+                        target.setOp(false);
+                        target.setGlowing(false);
                         
                         target.sendMessage("§eDein Rang wurde geändert.");
                         break;

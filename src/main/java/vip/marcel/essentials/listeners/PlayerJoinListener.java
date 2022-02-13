@@ -2,11 +2,11 @@ package vip.marcel.essentials.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
-import vip.marcel.essentials.Essentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import vip.marcel.essentials.Essentials;
 import vip.marcel.essentials.entities.User;
 
 /**
@@ -26,6 +26,12 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoinEvent(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         
+        player.setOp(false);
+        player.setHealth(20);
+        player.setHealthScale(20);
+        player.setFoodLevel(20);
+        player.setGlowing(false);
+        
         plugin.getBackendManager().getUser(player, (User user) -> {
             
             switch (user.getGroupId()) {
@@ -42,11 +48,6 @@ public class PlayerJoinListener implements Listener {
                     player.setDisplayName("§4" + player.getName());
                     player.setPlayerListName("§4Administrator§8│ " + player.getDisplayName());
                     Bukkit.getServer().broadcastMessage("§8§l│ §a➟§8│ " + player.getDisplayName() + " §7hat den Server betreten§8.");
-                    
-                    if(!player.hasPermission("*")) {
-                            player.addAttachment(plugin, "*", true);
-                            player.recalculatePermissions();
-                        }
                     
                     Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                        player.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation(), 1);
@@ -83,7 +84,12 @@ public class PlayerJoinListener implements Listener {
             Bukkit.getConsoleSender().sendMessage("§a" + plugin.getGson().toJson(user));
         });
         
-        player.setOp(false);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if(plugin.getUser().get(player).getGroupId() == 2) {
+               player.setOp(true);
+               player.setGlowing(true); 
+            }
+        }, 10);
         
         event.setJoinMessage(null);
         

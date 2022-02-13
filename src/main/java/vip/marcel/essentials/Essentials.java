@@ -86,10 +86,6 @@ public class Essentials extends JavaPlugin {
         player.setMetadata(key, new FixedMetadataValue(this, value));
     }
 
-    public Map<Player, User> getUser() {
-        return user;
-    }
-
     public User getUserData(Player player) {
         if(this.user.containsKey(player)) {
             return this.user.get(player);
@@ -124,6 +120,10 @@ public class Essentials extends JavaPlugin {
 
     public Gson getGson() {
         return gson;
+    }
+    
+    public Map<Player, User> getUser() {
+        return user;
     }
     
 }
