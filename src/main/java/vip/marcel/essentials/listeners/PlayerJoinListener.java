@@ -1,7 +1,6 @@
 package vip.marcel.essentials.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Particle;
 import vip.marcel.essentials.Essentials;
 import org.bukkit.entity.Player;
