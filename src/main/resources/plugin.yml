@@ -2,9 +2,12 @@ name: Essentials
 version: 1.0
 author: VIPMarcel
 api-version: 1.17
+depend: [ProtocolLib]
+loadbefore: [ProtocolLib]
 
 main: vip.marcel.essentials.Essentials
 
 commands:
     group:
     pardon:
+    boom:
