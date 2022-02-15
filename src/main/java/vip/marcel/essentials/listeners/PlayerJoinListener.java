@@ -1,5 +1,7 @@
 package vip.marcel.essentials.listeners;
 
+import java.awt.Color;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -31,6 +33,27 @@ public class PlayerJoinListener implements Listener {
         player.setHealthScale(20);
         player.setFoodLevel(20);
         player.setGlowing(false);
+        
+        {
+            //TextComponent messageFlow = new TextComponent(plugin.buildColorFlow("Herzlich Willkommen", new Color(255, 0, 0), new Color(150, 0, 255)));
+            String messageFlow = plugin.buildColorFlowMessage("Du bist cool!", "#660000", "#FFFF66");
+            
+            StringBuilder message = new StringBuilder();
+            message.append(ChatColor.of(Color.decode("#660000"))).append("H")
+                    .append(ChatColor.of(Color.decode("#990000"))).append("e")
+                    .append(ChatColor.of(Color.decode("#CC0000"))).append("r")
+                    .append(ChatColor.of(Color.decode("#FF0000"))).append("z")
+                    .append(ChatColor.of(Color.decode("#FF3333"))).append("l")
+                    .append(ChatColor.of(Color.decode("#CC6600"))).append("i")
+                    .append(ChatColor.of(Color.decode("#FF9933"))).append("c")
+                    .append(ChatColor.of(Color.decode("#FFFF66"))).append("h")
+                    
+                    .append(ChatColor.GRAY).append(" Willkommen auf dem Server");
+            
+            player.sendMessage(message.toString());
+            //player.spigot().sendMessage(messageFlow);
+            player.sendMessage(messageFlow);
+        }
         
         plugin.getBackendManager().getUser(player, (User user) -> {
             
