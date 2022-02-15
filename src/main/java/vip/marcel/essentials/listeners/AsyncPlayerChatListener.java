@@ -1,6 +1,5 @@
 package vip.marcel.essentials.listeners;
 
-import vip.marcel.essentials.Essentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import vip.marcel.essentials.Essentials;
 import vip.marcel.essentials.entities.User;
 
 /**

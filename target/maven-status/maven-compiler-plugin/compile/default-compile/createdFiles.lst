@@ -1,6 +1,7 @@
 vip\marcel\essentials\commands\BoomCommand.class
 vip\marcel\essentials\Essentials$3.class
 vip\marcel\essentials\Essentials.class
+vip\marcel\essentials\colorfade\ColorToColorInterpolation.class
 vip\marcel\essentials\listeners\AsyncPlayerChatListener.class
 vip\marcel\essentials\listeners\PlayerJoinListener.class
 vip\marcel\essentials\listeners\PlayerQuitListener.class
@@ -10,5 +11,6 @@ vip\marcel\essentials\Essentials$1.class
 vip\marcel\essentials\commands\GroupCommand.class
 vip\marcel\essentials\managers\BackendManager.class
 vip\marcel\essentials\managers\MongoManager.class
+vip\marcel\essentials\colorfade\ColorToColorInterpolation$FromToDelta.class
 vip\marcel\essentials\commands\PardonCommand.class
 vip\marcel\essentials\Essentials$2.class

@@ -12,13 +12,13 @@ import java.awt.Color;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import vip.marcel.essentials.colorfade.ColorToColorInterpolation;
 import vip.marcel.essentials.commands.BoomCommand;
 import vip.marcel.essentials.commands.GroupCommand;
 import vip.marcel.essentials.commands.PardonCommand;
@@ -160,7 +160,8 @@ public class Essentials extends JavaPlugin {
 
                     }
                     else {
-                        player.sendMessage("§cDer Chat ist nur für §4Teammitglieder §cbenutzbar.");
+                        //player.sendMessage("§cDer Chat ist nur für §4Teammitglieder §cbenutzbar.");
+                        player.sendMessage(buildColorFlowMessage("Der Chat ist nur für Teammitglieder benutzbr.", "#FF3333", "#FFFF66"));
                         event.setCancelled(true);
                     }
                 }
@@ -203,68 +204,6 @@ public class Essentials extends JavaPlugin {
         this.user.put(player, user);
     }
     
-    public TextComponent buildColorFlow(String message, Color from, Color to) {
-        TextComponent component = null;
-        
-        int colorSteps = calcDiff(from.getRed(), to.getRed())
-                + calcDiff(from.getGreen(), to.getGreen())
-                + calcDiff(from.getBlue(), to.getBlue());
-        
-        int colorJump = message.length() / colorSteps;
-        
-        int red = from.getRed();
-        int green = from.getGreen();
-        int blue = from.getBlue();
-        
-        int index = 0;
-        char[] messageArray = message.toCharArray();
-        
-        while(index != messageArray.length) {
-            
-            if(red != to.getRed()) {
-                
-                red += colorJump;
-                if(red > to.getRed()) {
-                    red = to.getRed();
-                }
-                
-            }
-            else if(green != to.getGreen()) {
-                
-                green += colorJump;
-                if(green > to.getGreen()) {
-                    green = to.getGreen();
-                }
-                
-            }
-            else if(blue != to.getBlue()) {
-                
-                blue += colorJump;
-                if(blue > to.getBlue()) {
-                    blue = to.getBlue();
-                }
-                
-            }
-            
-            TextComponent coloredComponent = new TextComponent(String.valueOf(messageArray[index++]));
-            coloredComponent.setColor(ChatColor.of(new Color(red, green, blue)));
-            
-            if(component != null) {
-                component.addExtra(coloredComponent);
-            }
-            else {
-                component = coloredComponent;
-            }
-            
-            index++;
-        }
-        
-        return  component;
-    }
-    private int calcDiff(int color1, int color2) {
-        return color1 > color2 ? color1 - color2 : color2 - color1;
-    }
-    
     public Color hexToColor(String hex) {
         hex = hex.replace("#", "");
         
@@ -295,7 +234,7 @@ public class Essentials extends JavaPlugin {
     }
     
     public String buildColorFlowMessage(String message, String fromHexColor, String toHexColor) {
-        StringBuilder colorMessage = new StringBuilder();
+        StringBuilder messageColor = new StringBuilder();
         
         Color fromColor = Color.decode(fromHexColor);
         Color toColor = Color.decode(toHexColor);
@@ -304,30 +243,13 @@ public class Essentials extends JavaPlugin {
         char[] messageArray = message.toCharArray();
         
         while(i < messageArray.length) {
-            
-            int percent = i / (messageArray.length - 1);
-            
-            /*Color modifiedColor = new Color(
-                    fromColor.getRed() + percent * (toColor.getRed() - fromColor.getRed()),
-                    fromColor.getGreen() + percent * (toColor.getGreen() - fromColor.getGreen()),
-                    fromColor.getBlue() + percent * (toColor.getBlue() - fromColor.getBlue()));
-            */
-            
-            int modifiedColor = 
-                    ((fromColor.getRed() + percent * (toColor.getRed() - fromColor.getRed())) << 16) |
-                    ((fromColor.getGreen() + percent * (toColor.getGreen() - fromColor.getGreen())) << 8) |
-                    ((fromColor.getBlue() + percent * (toColor.getBlue() - fromColor.getBlue())) << 0);
-            
-            //String hex = String.format("#%02X%02X%02X", modifiedColor.getRed(), modifiedColor.getGreen(), modifiedColor.getBlue());
-            
-            //colorMessage.append(ChatColor.of(hex))
-            colorMessage.append(ChatColor.of(hexToColor(Integer.toString(modifiedColor, 16))))
-                    .append(String.valueOf(messageArray[i]));
+            messageColor.append(ChatColor.of(new ColorToColorInterpolation(fromColor, toColor, messageArray.length).getInterpolated(i)));
+            messageColor.append(String.valueOf(messageArray[i]));
             
             i++;
         }
         
-        return colorMessage.toString();
+        return messageColor.toString();
     }
     
     public String getPrefix() {
