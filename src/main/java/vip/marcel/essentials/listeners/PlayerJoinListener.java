@@ -1,5 +1,6 @@
 package vip.marcel.essentials.listeners;
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -45,7 +46,12 @@ public class PlayerJoinListener implements Listener {
                     
                     break;
                 case 2:
-                    player.setDisplayName("§4" + player.getName());
+                    if(player.getUniqueId().equals(UUID.fromString("d0a9dabf-7189-44fd-ae2b-04ac56de405d"))) {
+                        player.setDisplayName("§4" + plugin.buildColorFlowMessage(player.getName(), "#FF3333", "#FFFF66"));
+                    }
+                    else {
+                        player.setDisplayName("§4" + player.getName());
+                    }
                     player.setPlayerListName("§4Administrator§8│ " + player.getDisplayName());
                     Bukkit.getServer().broadcastMessage("§8§l│ §a➟§8│ " + player.getDisplayName() + " §7hat den Server betreten§8.");
                     
@@ -78,8 +84,6 @@ public class PlayerJoinListener implements Listener {
             user.setLastLogin(System.currentTimeMillis());
             user.setName(player.getName());
             plugin.getBackendManager().updateUser(user, (User updatedUser) -> {});
-            
-            player.setPlayerListHeaderFooter("\n§8    §7Herzlich Willkommen auf §bLocalGames§8,    §8\n\n", "\n\n§7Du hast Fragen zu unserem Server? §8► §9Discord\n");
             
             Bukkit.getConsoleSender().sendMessage("§a" + plugin.getGson().toJson(user));
         });

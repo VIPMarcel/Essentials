@@ -1,5 +1,6 @@
 package vip.marcel.essentials.commands;
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -105,7 +106,12 @@ public class GroupCommand implements CommandExecutor {
                         break;
                     
                     case 2:
-                        target.setDisplayName("§4" + target.getName());
+                        if(target.getUniqueId().equals(UUID.fromString("d0a9dabf-7189-44fd-ae2b-04ac56de405d"))) {
+                            target.setDisplayName("§4" + plugin.buildColorFlowMessage(target.getName(), "#FF3333", "#FFFF66"));
+                        }
+                        else {
+                            target.setDisplayName("§4" + target.getName());
+                        }
                         target.setPlayerListName("§4Administrator§8│ " + target.getDisplayName());
                         
                         target.setOp(true);

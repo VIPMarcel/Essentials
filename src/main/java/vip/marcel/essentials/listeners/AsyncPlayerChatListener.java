@@ -51,20 +51,8 @@ public class AsyncPlayerChatListener implements Listener {
                         break;
                     }
                     
-                    String playTime;
-                    if(user.getOnlineTime() == 1) {
-                        playTime = "1 Sekunde";
-                    } else if(user.getOnlineTime() < 60) {
-                        playTime = String.valueOf(user.getOnlineTime()) + " Sekunden";
-                    } else if(user.getOnlineTime() >= 60 && user.getOnlineTime() < 120) {
-                        playTime = "1 Minute";
-                    } else {
-                        playTime = String.valueOf(user.getOnlineTime() / 60) + " Minuten";
-                    }
-                    
                     event.setCancelled(true);
                     player.sendMessage("§cDu musst mindestens §e30 Minuten §cgespielt haben, um den Chat nutzen zu können");
-                    player.sendMessage("§cDeine Spielzeit §8► §e" + playTime);
                     player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.7899F, 0.008F);
                     player.playSound(player.getLocation(), Sound.BLOCK_LADDER_HIT, 0.7899F, 0.008F);
                     player.playEffect(player.getLocation(), Effect.ENDERDRAGON_SHOOT, 1);

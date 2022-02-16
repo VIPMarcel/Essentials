@@ -11,3 +11,5 @@ commands:
     group:
     pardon:
     boom:
+    globalmute:
+      aliases: [gmute]
